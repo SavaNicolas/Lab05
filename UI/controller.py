@@ -15,21 +15,63 @@ class Controller:
 
     def handle_cercaStudenti(self, e):
         """ cerca studenti, se lo trova mi riempe nome e cognome a dx"""
-        name = self._view.txt_name.value
-        if name is None or name == "":
-            self._view.create_alert("Inserire il nome")
+        matricola= self._view.txt_matricola.value
+
+        if matricola is None or matricola == "":
+            self._view.create_alert("Inserire la matricola")
             return
-        self._view.txt_result.controls.append(ft.Text(f"Hello, {name}!"))
+
+        dict_nomeCognome= self._model.cercaNomeda(matricola) #potrebbe essere vuoto {}
+
+        if not dict_nomeCognome:
+            self._view.create_alert("matricola non trovata")
+            return
+
+        self._view.txt_nome.value= f"{dict_nomeCognome["nome"]}"
+        self._view.txt_cognome.value= f"{dict_nomeCognome["cognome"]}"
         self._view.update_page()
 
     def handle_cercaCorsi(self, e):
-        pass
+        """
+        inserisco la matricola e mi da i corsi a cui è iscritto
+        :param e:
+        :return:
+        """
+        matricola=self._view.txt_matricola.value
+        if matricola is None or matricola == "":
+            self._view.create_alert("Inserire la matricola")
+            return
+        corsi,counter= self._model.cercaCorsi(matricola)
+        self._view.txt_result.controls.append(ft.Text(f"Lo studente è iscritto a {counter} corsi:"))
+        for corso in corsi:
+            self._view.txt_result.controls.append(ft.Text(f"{corso.__str__()}"))
+
+        self._view.update_page()
 
     def handle_iscrivi(self, e):
         pass
 
     def handle_cercaIscritti(self,e):
-        pass
+        """
+        metodo che ti restituisce gli iscritti al corso selezionato.
+        se non viene selezionato nessun corso avvisa l'utente con un allert dialog
+        :param e:
+        :return:
+        """
+        corsoSelezionato= self._view._selezionaCorso.value
+        if corsoSelezionato is None or corsoSelezionato == "":
+            self._view.create_alert("Selezionare il corso")
+            return
+
+        #se non entra restituisci studenti iscritti a quel corso
+        studentiCorso= self._model.restituisciStudenti(corsoSelezionato)#array studenti
+        for studente in studentiCorso:
+            self._view.txt_result.controls.append(ft.Text(studente.__str__()))
+
+        self._view.update_page()
+
+
+
 
     def fillCorso(self):
         dao = CorsoDAO()

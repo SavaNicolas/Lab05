@@ -27,12 +27,11 @@ class View(ft.UserControl):
 
         #row1: seleziona corso + button seleziona iscritti
 
-        self._selezionaCorso = ft.Dropdown(label="Seleziona un corso", hint_text="corso",
+        self._selezionaCorso = ft.Dropdown(label="Seleziona un corso",
                                               options=[], autofocus=True, width=610)
         self._controller.fillCorso() #per riempire control (fallo dopo aver creato la tendina)
-
-            #option lo devi riempire dal controller
-        self.btn_cercaIscritti = ft.ElevatedButton(text="Cerca studente",
+                                    #option lo devi riempire dal controller
+        self.btn_cercaIscritti = ft.ElevatedButton(text="Cerca iscritti",
                                                    on_click=self._controller.handle_cercaIscritti)
             #definisci on click
 
@@ -47,13 +46,15 @@ class View(ft.UserControl):
         self.txt_nome = ft.TextField(
             label="Nome",
             width=200,
-            read_only=True
+            read_only=True,
+            value=""
             #appare il nome una volta che ho cliccato cerca studente
         )
         self.txt_cognome = ft.TextField(
             label="Cognome",
             width=200,
-            read_only=True
+            read_only=True,
+            value=""
             #appare il nome una volta che ho cliccato cerca studente
         )
         row2 = ft.Row([self.txt_matricola, self.txt_nome, self.txt_cognome])
